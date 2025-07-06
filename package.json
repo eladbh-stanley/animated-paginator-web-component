@@ -1,0 +1,32 @@
+{
+  "name": "animated-paginator-web-component",
+  "version": "1.0.0",
+  "description": "A reusable animated paginator implemented as a Web Component.",
+  "keywords": [
+    "web-component",
+    "paginator",
+    "pagination",
+    "animated",
+    "ui"
+  ],
+  "author": "Elad Ben-Haim <elad.benhaim@solaraai.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourgithub/animated-paginator-web-component.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourgithub/animated-paginator-web-component/issues"
+  },
+  "homepage": "https://github.com/yourgithub/animated-paginator-web-component#readme",
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  }
+} 

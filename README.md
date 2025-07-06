@@ -1,0 +1,1 @@
+# animated-paginator-web-component

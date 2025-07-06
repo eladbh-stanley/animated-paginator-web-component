@@ -1,6 +1,6 @@
 {
   "name": "animated-paginator-web-component",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A reusable animated paginator implemented as a Web Component.",
   "keywords": [
     "web-component",
@@ -29,4 +29,4 @@
   "scripts": {
     "test": "echo \"No tests specified\" && exit 0"
   }
-} 
+}

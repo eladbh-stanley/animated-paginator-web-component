@@ -57,7 +57,7 @@ popd > /dev/null
 rm -rf "$TEMP_DIR"
 
 echo "📖 Updating README with live demo link …"
-DEMO_URL="$(echo "$REPO_URL" | sed -E 's|(git@github.com:|https://github.com/)|; s|\.git$||')/raw/gh-pages/index.html"
+DEMO_URL="$(echo "$REPO_URL" | sed -E 's|git@github.com:|https://github.com/|; s|\.git$||')/raw/gh-pages/index.html"
 
 # Insert or update the demo link section.
 if grep -q "## 🔗 Live Demo" README.md; then

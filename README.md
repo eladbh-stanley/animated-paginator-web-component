@@ -3,6 +3,9 @@
 A lightweight, framework-agnostic paginator built as a native Web Component.
 
 ## ✨ Features
+## 🔗 Live Demo
+See it in action here 👉 https://github.com/eladbh-stanley/animated-paginator-web-component/raw/gh-pages/index.html
+
 
 • Smooth pill-style animation between pages  
 • Fully encapsulated styles (Shadow DOM)  

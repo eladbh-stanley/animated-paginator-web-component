@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Paginator – Demo</title>
+    <style>
+      /* Page styling purely for demo purposes */
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        transition: background-color 0.5s ease-in-out;
+        background-color: #4285f4; /* initial */
+      }
+
+      .controls {
+        display: flex;
+        gap: 16px;
+      }
+
+      .controls button {
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .controls button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .controls button:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .note {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+    </style>
+
+    <!--  Import the component locally  -->
+    <script type="module" src="./index.js"></script>
+    <!--
+      Alternatively, after publishing to npm you can import via a bundler
+      or use an ESM CDN:
+        <script type="module" src="https://unpkg.com/animated-paginator-web-component@latest/index.js"></script>
+    -->
+  </head>
+  <body>
+    <div class="note">
+      <strong>Animated Paginator Demo</strong><br />
+      Use dots or buttons to navigate.
+    </div>
+
+    <!-- Web Component instance -->
+    <animated-paginator
+      pages="4"
+      initial-page="0"
+      page-colors="#EA4335,#34A853,#4285F4,#FBBC05"
+      id="paginator-horizontal"
+    ></animated-paginator>
+
+    <!-- Vertical instance -->
+    <animated-paginator
+      orientation="vertical"
+      pages="4"
+      initial-page="1"
+      page-colors="#EA4335,#34A853,#4285F4,#FBBC05"
+      id="paginator-vertical"
+    ></animated-paginator>
+
+    <!-- Controls using public API -->
+    <div class="controls">
+      <button id="prev-btn">Previous</button>
+      <button id="next-btn">Next</button>
+    </div>
+
+    <!-- External page control -->
+    <div class="controls" id="jump-controls">
+      <button data-page="0">Page&nbsp;1</button>
+      <button data-page="1">Page&nbsp;2</button>
+      <button data-page="2">Page&nbsp;3</button>
+      <button data-page="3">Page&nbsp;4</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Ensure the custom element class is loaded & upgraded
+        await customElements.whenDefined("animated-paginator");
+
+        const paginator = document.getElementById("paginator-horizontal");
+        const verticalPaginator = document.getElementById("paginator-vertical");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+
+        // Button handlers (public API)
+        prevBtn.addEventListener("click", () => paginator.previous());
+        nextBtn.addEventListener("click", () => paginator.next());
+
+        // Jump buttons control Horizontal paginator externally
+        document.querySelectorAll('#jump-controls button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page, 10);
+            // Using property – could also set attribute: paginator.setAttribute('page', page)
+            paginator.page = page;
+          });
+        });
+
+        // React to page changes to synchronise background colour
+        const updateBg = (evt) => {
+          document.body.style.backgroundColor = evt.detail.pageColor;
+        };
+
+        paginator.addEventListener("page-changed", updateBg);
+        verticalPaginator.addEventListener("page-changed", updateBg);
+
+        // Keep horizontal and vertical paginators in sync
+        paginator.addEventListener('page-changed', (evt) => {
+          const idx = evt.detail.newPage;
+          if (verticalPaginator.getCurrentPage() !== idx) {
+            verticalPaginator.page = idx;
+          }
+        });
+
+        verticalPaginator.addEventListener('page-changed', (evt) => {
+          const idx = evt.detail.newPage;
+          if (paginator.getCurrentPage() !== idx) {
+            paginator.page = idx;
+          }
+        });
+
+        // Set initial background based on component's starting page
+        document.body.style.backgroundColor = paginator._config.pageColors[paginator.getCurrentPage()];
+      });
+    </script>
+  </body>
+</html> 

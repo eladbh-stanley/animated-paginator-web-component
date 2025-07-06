@@ -57,22 +57,24 @@ popd > /dev/null
 rm -rf "$TEMP_DIR"
 
 echo "📖 Updating README with live demo link …"
-DEMO_URL="$(echo "$REPO_URL" | sed -E 's|git@github.com:|https://github.com/|; s|\.git$||')/raw/gh-pages/index.html"
+# Build GitHub Pages URL
+USER_REPO=$(echo "$REPO_URL" | sed -E 's|.*github.com[/:]([^/]+)/([^/.]+)(\.git)?|\1/\2|')
+GHPAGES_URL="https://${USER_REPO%%/*}.github.io/${USER_REPO#*/}/"
 
 # Insert or update the demo link section.
 if grep -q "## 🔗 Live Demo" README.md; then
-  # Replace the following line with updated URL
-  sed -i "0,/## 🔗 Live Demo/{n;s|.*|$DEMO_URL|}" README.md
+  # Replace the following line with updated URL on next line after header
+  sed -i "0,/## 🔗 Live Demo/{n;s|.*|See it in action here 👉 ${GHPAGES_URL}|}" README.md
 else
   # Append new section near top (after features)
   sed -i "/## ✨ Features/a \\
-## 🔗 Live Demo\\nSee it in action here 👉 $DEMO_URL\n" README.md
+## 🔗 Live Demo\\nSee it in action here 👉 ${GHPAGES_URL}\n" README.md
 fi
 
 git add README.md
-git commit -m "docs: add/update live demo link"
+git commit -m "docs: add/update live demo link to ${GHPAGES_URL}"
 
 echo "⬆️  Pushing changes back to origin …"
 git push origin main
 
-echo "✅ Deployment complete! Package v$NEW_VERSION published and demo live at $DEMO_URL" 
+echo "✅ Deployment complete! Package v$NEW_VERSION published and demo live at ${GHPAGES_URL}" 
